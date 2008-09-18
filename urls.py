@@ -6,7 +6,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Example:
-    # (r'^ajax_tut/', include('ajax_tut.foo.urls')),
+    (r'^', include('ajax_tut.notes.urls')),
 
     # Uncomment the next line to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
