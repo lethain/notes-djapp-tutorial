@@ -14,7 +14,7 @@ MANAGERS = ADMINS
 ## Changed
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 ## Changed
-DATABASE_NAME = os.path.join(ROOT_PATH, 'captavate.sqlite')
+DATABASE_NAME = os.path.join(ROOT_PATH, 'notes.sqlite')
 
 TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en-us'
