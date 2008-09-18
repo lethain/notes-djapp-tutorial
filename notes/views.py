@@ -6,11 +6,15 @@ def create_note(request):
     if request.method == "POST":
         post = request.POST.copy()
         if post.has_key('slug') and post.has_key('title'):
-            title = post['title']
             slug = post['slug']
-            new_note = Note.objects.create(title=title,slug=slug)
-            return HttpResponseRedirect(new_note.get_absolute_url())
-        error_msg = u"Insufficient POST data (need 'slug' and 'title'!)"
+            if Note.objects.filter(slug=slug).count() > 0:
+                error_msg = u"Slug already in use."
+            else:
+                title = post['title']
+                new_note = Note.objects.create(title=title,slug=slug)
+                return HttpResponseRedirect(new_note.get_absolute_url())
+        else:
+            error_msg = u"Insufficient POST data (need 'slug' and 'title'!)"
     return HttpResponseServerError(error_msg)
 
 def update_note(request, slug):
