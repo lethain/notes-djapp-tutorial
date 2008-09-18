@@ -12,5 +12,7 @@ urlpatterns = patterns(
     (r'^note/(?P<slug>[-\w]+)/$', 
      'django.views.generic.list_detail.object_detail',
      dict(queryset=notes, slug_field='slug')),
+    (r'^create/$','notes.views.create_note'),
+    
 )
 
