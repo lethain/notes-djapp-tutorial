@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="detail">
+  <form method="post" action="/update/">
+  <div class="text">
+    <label for="title">Title</label>
+    <input type="text" name="title" id="title" value="{{ object.title }}">
+    <label for="slug">Slug</label>
+    <input type="text" name="slug" id="slug" value="{{ object.slug }}">
+  </div>
+  <textarea name="text" id="text">
+  {{ object.text }}
+  </textarea>
+  <input type="submit" value="update note">
+  </form>
+
+</div>
+
+{% endblock %}
