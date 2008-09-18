@@ -2,6 +2,25 @@
 
 {% block content %}
 
-<p> Hi </p>
+<div class="new">
+  <p> Create a new note. </p>
+  <form method="post" action="/create/">
+  <label for="title">Title</label> <input type="text" name="title" id="title">
+  <label for="slug">Slug</label> <input type="text" name="slug" id="slug">
+  <input type="submit" value="create note">
+  </form>
+</div>
+
+
+<div class="list">
+  <h2> Notes </h2>
+  <ol>
+    {% for object in object_list %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
+    {% endfor %}
+  </ol>
+</div>
+
+
 
 {% endblock %}
