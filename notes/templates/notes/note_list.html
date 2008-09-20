@@ -14,7 +14,7 @@
 
 <div class="list">
   <h2> Notes </h2>
-  <ol>
+  <ol id="notes">
     {% for object in object_list %}
     <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
     {% endfor %}
@@ -22,27 +22,40 @@
 </div>
 
 <script>
-var my_func = function() { alert("yes"); return false; };
-
-$("#create").onclick(my_func);
-
-/*
-var onComplete = function(res,status) {
+var done = function(res, status) {
   if (status == "success") {
-
+    var txt = res.responseText;
+    var titleStr = txt.match(/id="title" value="\w+"/ig)[0];
+    var slugStr = txt.match(/id="slug" value="\w+"/ig)[0];
+    var title = titleStr.match(/"\w+"/ig)[1].replace(/"/g,'');
+    var slug = slugStr.match(/"\w+"/ig)[1].replace(/"/g,'');
+    var newLi = $('<li><a href="/note/'+slug+'">'+title+'</a></li>');
+    $("#notes").append(newLi);
+    $("#title").val("");
+    $("#slug").val("");
   }
   else {
-
-  } 
+    // display an explanation of failure
+  }
 }
 
-var create = function(title, slug) {
-  var data = {title:title,slug:slug};
-  var args = {type:"POST",url:"/create/",data:data,complete:onComplete}
-  $.ajax();
-}
-*/
+var create_note = function() {
+  var title = $("#title").val()
+  var slug = $("#slug").val()
+  if (title != "" && slug != "") {
+    var data = { title:title, slug:slug };
+    var args = { type:"POST", url:"/create/", data:data, complete:done };
+    $.ajax(args);
+  }
+  else {
+    // display an explanation of failure
+  }
+  
 
+  return false;
+};
+
+$("#create").click(create_note);
 </script>
 
 
