@@ -30,7 +30,7 @@ var done = function(res, status) {
     var title = titleStr.match(/"\w+"/ig)[1].replace(/"/g,'');
     var slug = slugStr.match(/"\w+"/ig)[1].replace(/"/g,'');
     var newLi = $('<li><a href="/note/'+slug+'">'+title+'</a></li>');
-    $("#notes").append(newLi);
+    $("#notes").prepend(newLi);
     $("#title").val("");
     $("#slug").val("");
   }
