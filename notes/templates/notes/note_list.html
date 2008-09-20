@@ -7,7 +7,7 @@
   <form method="post" action="/create/">
   <label for="title">Title</label> <input type="text" name="title" id="title">
   <label for="slug">Slug</label> <input type="text" name="slug" id="slug">
-  <input type="submit" value="create note">
+  <input id="create" type="submit" value="create note">
   </form>
 </div>
 
@@ -20,6 +20,30 @@
     {% endfor %}
   </ol>
 </div>
+
+<script>
+var my_func = function() { alert("yes"); return false; };
+
+$("#create").onclick(my_func);
+
+/*
+var onComplete = function(res,status) {
+  if (status == "success") {
+
+  }
+  else {
+
+  } 
+}
+
+var create = function(title, slug) {
+  var data = {title:title,slug:slug};
+  var args = {type:"POST",url:"/create/",data:data,complete:onComplete}
+  $.ajax();
+}
+*/
+
+</script>
 
 
 
