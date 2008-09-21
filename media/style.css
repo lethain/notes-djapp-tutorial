@@ -33,9 +33,6 @@ body {
     margin-bottom: 2em;
 }
 
-.detail .text {
-    text-align: center;
-}
 
 .detail textarea {
     margin-top: 1em;
@@ -47,4 +44,20 @@ body {
     width: 50%;
     margin-left: 25%;
     margin-right: 25%;
+}
+
+.error_msg {
+    background-color: red;
+    border: 1px solid black;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+.success_msg {
+    background-color: blue;
+    border: 1px solid black;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: center;
 }
