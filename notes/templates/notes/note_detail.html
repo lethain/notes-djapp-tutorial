@@ -17,7 +17,40 @@
   <textarea name="text" id="text">{{ object.text }}</textarea>
   <input class="submit" type="submit" value="update note">
   </form>
-
 </div>
+
+<script>
+$(document).ready(function() {
+  var title_to_input = function() {
+    var title = $("#title");
+    var input = $('<input type="text" name="title" id="title" value="'+title.text()+'">');
+    input.hover(function() {}, title_to_span);
+    title.replaceWith(input);
+  }
+  var title_to_span = function() {
+    // called on mouse away
+    var title = $("#title");
+    var span = $('<span id="title"><em>'+title.val()+'</em></span>');
+    span.hover(title_to_input,function() {});
+    title.replaceWith(span);
+  }
+  var slug_to_input = function() {
+    var slug = $("#slug");
+    var input = $('<input type="text" name="slug" id="slug" value="'+slug.text()+'">');
+    input.hover(function() {}, slug_to_span);
+    slug.replaceWith(input);
+  }
+  var slug_to_span = function() {
+    // called on mouse away
+    var slug = $("#slug");
+    var span = $('<span id="slug"><em>'+slug.val()+'</em></span>');
+    span.hover(slug_to_input,function() {});
+    slug.replaceWith(span);
+  }
+  title_to_span();
+  slug_to_span();
+});
+
+</script>
 
 {% endblock %}
