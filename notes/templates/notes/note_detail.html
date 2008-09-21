@@ -21,6 +21,21 @@
 
 <script>
 $(document).ready(function() {
+  var initialTitleChange = true;
+  var initialSlugChange = true;
+
+  var perform_update = function(field, val) {
+    var data = {};
+    data[field] = val;
+    var args = { type:"POST", url:"update/", data:data, complete:done };
+    $.ajax(args);
+  };
+
+  var done = function(res, status) {
+    if (status == "success") display_success("Updated successfully.", $(".text"));
+    else display_error(res.responseText, $(".text"));
+  }
+
   var title_to_input = function() {
     var title = $("#title");
     var input = $('<input type="text" name="title" id="title" value="'+title.text()+'">');
@@ -30,6 +45,8 @@ $(document).ready(function() {
   var title_to_span = function() {
     // called on mouse away
     var title = $("#title");
+    if (initialTitleChange) initialTitleChange = false;
+    else perform_update("title", title.val());
     var span = $('<span id="title"><em>'+title.val()+'</em></span>');
     span.hover(title_to_input,function() {});
     title.replaceWith(span);
@@ -43,12 +60,16 @@ $(document).ready(function() {
   var slug_to_span = function() {
     // called on mouse away
     var slug = $("#slug");
+    if (initialSlugChange) initialSlugChange = false;
+    else perform_update("slug", slug.val());
     var span = $('<span id="slug"><em>'+slug.val()+'</em></span>');
     span.hover(slug_to_input,function() {});
     slug.replaceWith(span);
   }
   title_to_span();
   slug_to_span();
+  $("#text").hover(function() {}, function() { perform_update("text", $("#text").text()); });
+  $("input[type=submit]").remove()
 });
 
 </script>
