@@ -1,6 +1,6 @@
 from django.utils import simplejson
 from models import Note
-from django.http import HttpResponseRedirect, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 
 def create_note(request):
     error_msg = u"No POST data sent."
@@ -19,23 +19,25 @@ def create_note(request):
     return HttpResponseServerError(error_msg)
 
 def ajax_create_note(request):
-    to_return = {'success':False, 'msg':u'No POST data sent.' }
+    success = False
+    to_return = {'msg':u'No POST data sent.' }
     if request.method == "POST":
+        post = request.POST.copy()
         if post.has_key('slug') and post.has_key('title'):
             slug = post['slug']
             if Note.objects.filter(slug=slug).count() > 0:
-                to_return['msg'] = u"Slug already in use."
+                to_return['msg'] = u"Slug '%s' already in use." % slug
             else:
                 title = post['title']
                 new_note = Note.objects.create(title=title,slug=slug)
                 to_return['title'] = title
                 to_return['slug'] = slug
                 to_return['url'] = new_note.get_absolute_url()
-                to_return['success'] = True
+                success = True
         else:
             to_return['msg'] = u"Requires both 'slug' and 'title'!"
     serialized = simplejson.dumps(to_return)
-    if to_return['success']:
+    if success == True:
         return HttpResponse(serialized, mimetype="application/json")
     else:
         return HttpResponseServerError(serialized, mimetype="application/json")

@@ -21,22 +21,17 @@
 </div>
 
 <script>
+
 var done = function(res, status) {
+  var txt = res.responseText;
+  var data = eval('('+txt+')');
   if (status == "success") {
-    var txt = res.responseText;
-    var titleStr = txt.match(/id="title" value="\w+"/ig)[0];
-    var slugStr = txt.match(/id="slug" value="\w+"/ig)[0];
-    var title = titleStr.match(/"\w+"/ig)[1].replace(/"/g,'');
-    var slug = slugStr.match(/"\w+"/ig)[1].replace(/"/g,'');
-    var newLi = $('<li><a href="/note/'+slug+'">'+title+'</a></li>');
+    var newLi = $('<li><a href="'+data.url+'">'+data.title+'</a></li>');
     $("#notes").prepend(newLi);
     $("#title").val("");
     $("#slug").val("");
   }
-  else {
-    // display an explanation of failure
-    display_error(res.responseText, $(".new"));
-  }
+  else display_error(data.msg, $(".new"));
 }
 
 var create_note = function() {
@@ -44,7 +39,7 @@ var create_note = function() {
   var slug = $("#slug").val()
   if (title != "" && slug != "") {
     var data = { title:title, slug:slug };
-    var args = { type:"POST", url:"/create/", data:data, complete:done };
+    var args = { type:"POST", url:"/ajax_create/", data:data, complete:done };
     $.ajax(args);
   }
   else {
