@@ -35,7 +35,10 @@ def ajax_create_note(request):
         else:
             to_return['msg'] = u"Requires both 'slug' and 'title'!"
     serialized = simplejson.dumps(to_return)
-    return HttpResponse(serialized, mimetype="application/json")
+    if to_return['success']:
+        return HttpResponse(serialized, mimetype="application/json")
+    else:
+        return HttpResponseServerError(serialized, mimetype="application/json")
 
 def update_note(request, slug):
     if request.method == "POST":
