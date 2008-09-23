@@ -68,21 +68,26 @@ def ajax_update_note(request, slug):
     if request.method == "POST":
         post = request.POST.copy()
         note = Note.objects.get(slug=slug)
+        to_return['msg'] = "Updated successfully."
+        success = True
         if post.has_key('slug'):
             slug_str = post['slug']
             if note.slug != slug_str:
                 if Note.objects.filter(slug=slug_str).count() > 0:
                     to_return['msg'] = u"Slug '%s' already taken." % slug_str
                     to_return['slug'] = note.slug
+                    success = False
                 else:
                     note.slug = slug_str
                     to_return['url'] = note.get_absolute_url()
-                    success = True
         if post.has_key('title'):
             note.title = post['title']
         if post.has_key('text'):
             note.text = post['text']
         note.save()
+    print success
+    print to_return
+    print request.method
     serialized = simplejson.dumps(to_return)
     if success == True:
         return HttpResponse(serialized, mimetype="application/json")

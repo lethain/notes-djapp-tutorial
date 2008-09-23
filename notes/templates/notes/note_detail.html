@@ -21,19 +21,31 @@
 
 <script>
 $(document).ready(function() {
-  var initialTitleChange = true;
-  var initialSlugChange = true;
+  var history = { title: $("#title").val(), slug: $("#slug").val() };
 
   var perform_update = function(field, val) {
     var data = {};
     data[field] = val;
-    var args = { type:"POST", url:"update/", data:data, complete:done };
+    var args = { type:"POST", url:"ajax_update/", data:data, complete:done };
     $.ajax(args);
   };
 
   var done = function(res, status) {
-    if (status == "success") display_success("Updated successfully.", $(".text"));
-    else display_error(res.responseText, $(".text"));
+    var txt = res.responseText;
+    var data = eval('('+txt+')');
+    if (status == "success") {
+      display_success("Updated successfully.", $(".text"));
+      if (data.url) {
+        window.location = data.url
+      }
+    }
+    else {
+      display_error(data.msg, $(".text"));
+      if (data.slug) {
+        history['slug'] = data.slug;
+        $("#slug").text(data.slug);
+      }
+    }
   }
 
   var title_to_input = function() {
@@ -45,8 +57,10 @@ $(document).ready(function() {
   var title_to_span = function() {
     // called on mouse away
     var title = $("#title");
-    if (initialTitleChange) initialTitleChange = false;
-    else perform_update("title", title.val());
+    if (title.val() != history['title']) {
+      perform_update("title", title.val());
+      history['title'] = title.val()
+    }
     var span = $('<span id="title"><em>'+title.val()+'</em></span>');
     span.hover(title_to_input,function() {});
     title.replaceWith(span);
@@ -60,15 +74,17 @@ $(document).ready(function() {
   var slug_to_span = function() {
     // called on mouse away
     var slug = $("#slug");
-    if (initialSlugChange) initialSlugChange = false;
-    else perform_update("slug", slug.val());
+    if (slug.val() != history['slug']) {
+      perform_update("slug", slug.val());
+      history['slug'] = slug.val();
+    }
     var span = $('<span id="slug"><em>'+slug.val()+'</em></span>');
     span.hover(slug_to_input,function() {});
     slug.replaceWith(span);
   }
   title_to_span();
   slug_to_span();
-  $("#text").hover(function() {}, function() { perform_update("text", $("#text").text()); });
+  $("#text").hover(function() {}, function() { perform_update("text", $("#text").val()); });
   $("input[type=submit]").remove()
 });
 
