@@ -1,3 +1,4 @@
+from django.utils import simplejson
 from models import Note
 from django.http import HttpResponseRedirect, HttpResponseServerError
 
@@ -16,6 +17,25 @@ def create_note(request):
         else:
             error_msg = u"Insufficient POST data (need 'slug' and 'title'!)"
     return HttpResponseServerError(error_msg)
+
+def ajax_create_note(request):
+    to_return = {'success':False, 'msg':u'No POST data sent.' }
+    if request.method == "POST":
+        if post.has_key('slug') and post.has_key('title'):
+            slug = post['slug']
+            if Note.objects.filter(slug=slug).count() > 0:
+                to_return['msg'] = u"Slug already in use."
+            else:
+                title = post['title']
+                new_note = Note.objects.create(title=title,slug=slug)
+                to_return['title'] = title
+                to_return['slug'] = slug
+                to_return['url'] = new_note.get_absolute_url()
+                to_return['success'] = True
+        else:
+            to_return['msg'] = u"Requires both 'slug' and 'title'!"
+    serialized = simplejson.dumps(to_return)
+    return HttpResponse(serialized, mimetype="application/json")
 
 def update_note(request, slug):
     if request.method == "POST":
