@@ -1,7 +1,9 @@
 from django.utils import simplejson
 from models import Note
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def create_note(request):
     error_msg = u"No POST data sent."
     if request.method == "POST":
@@ -18,6 +20,7 @@ def create_note(request):
             error_msg = u"Insufficient POST data (need 'slug' and 'title'!)"
     return HttpResponseServerError(error_msg)
 
+@login_required
 def ajax_create_note(request):
     success = False
     to_return = {'msg':u'No POST data sent.' }
@@ -42,6 +45,7 @@ def ajax_create_note(request):
     else:
         return HttpResponseServerError(serialized, mimetype="application/json")
 
+@login_required
 def update_note(request, slug):
     if request.method == "POST":
         post = request.POST.copy()
@@ -62,6 +66,7 @@ def update_note(request, slug):
     error_msg = u"No POST data sent."
     return HttpResponseServerError(error_msg)
 
+@login_required
 def ajax_update_note(request, slug):
     success = False
     to_return = { 'msg': u"No POST data recieved." }
