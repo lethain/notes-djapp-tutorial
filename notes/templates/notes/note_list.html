@@ -2,6 +2,7 @@
 
 {% block content %}
 
+{% if user.is_authenticated %}
 <div class="new">
   <h2> Create a new note. </h2>
   <form method="post" action="/create/">
@@ -10,6 +11,7 @@
   <input id="create" type="submit" value="create note">
   </form>
 </div>
+{% endif %}
 
 <div class="list">
   <h2> Notes </h2>
@@ -20,6 +22,7 @@
   </ol>
 </div>
 
+{% if user.is_authenticated %}
 <script>
 
 var done = function(res, status) {
@@ -50,4 +53,6 @@ var create_note = function() {
 
 $("#create").click(create_note);
 </script>
+{% endif %}
+    
 {% endblock %}
