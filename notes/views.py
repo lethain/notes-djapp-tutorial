@@ -3,6 +3,19 @@ from models import Note
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.contrib.auth.decorators import login_required
 
+
+@login_required
+def slug_available(request):
+    if request.method == "GET":
+        get = request.GET.copy()
+        if get.has_key('slug'):
+            slug_str = get['slug']
+            if Note.objects.filter(slug=slug_str).count() == 0:
+                return HttpResponse(slug_str)
+            else:
+                return HttpResponseServerError(slug_str)
+    return HttpResponseServerError("Requires a slug field.")
+
 @login_required
 def create_note(request):
     error_msg = u"No POST data sent."

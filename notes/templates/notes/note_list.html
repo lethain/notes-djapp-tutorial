@@ -24,7 +24,7 @@
 
 {% if user.is_authenticated %}
 <script>
-
+$(document).ready(function() {
 var done = function(res, status) {
   var txt = res.responseText;
   var data = eval('('+txt+')');
@@ -52,6 +52,16 @@ var create_note = function() {
 };
 
 $("#create").click(create_note);
+
+$("#slug").keyup(function() {
+    var slug = this.value;
+    var complete = function(res, status) {
+       if (status == "success") $("#slug").css('background-color','#A0A0FF');
+       else $("#slug").css('background-color','#FFA0A0');
+    }
+    $.ajax({type:'GET', url:'/slug_available/', data:{'slug': slug }, complete:complete});
+    });
+});
 </script>
 {% endif %}
     
